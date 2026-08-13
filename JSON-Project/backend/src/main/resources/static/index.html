@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A modern placement management portal for students and companies">
+    <title>Placement Management Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Placement Portal</div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showSection('students-section')">Students</a></li>
+            <li><a href="#" onclick="showSection('companies-section')">Companies</a></li>
+            <li><a href="#" onclick="showSection('jobs-section')">Jobs</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <!-- Students Section -->
+        <section id="students-section" class="active-section">
+            <div class="header-action">
+                <h1>Student Profiles</h1>
+                <button class="btn-primary" onclick="toggleModal('studentModal')">Add Student</button>
+            </div>
+            <div class="grid" id="studentsList">
+                <!-- Students will be injected here -->
+            </div>
+        </section>
+
+        <!-- Companies Section -->
+        <section id="companies-section" style="display:none;">
+            <div class="header-action">
+                <h1>Registered Companies</h1>
+                <button class="btn-primary" onclick="toggleModal('companyModal')">Add Company</button>
+            </div>
+            <div class="grid" id="companiesList">
+                <!-- Companies will be injected here -->
+            </div>
+        </section>
+
+        <!-- Jobs Section -->
+        <section id="jobs-section" style="display:none;">
+            <div class="header-action">
+                <h1>Available Jobs</h1>
+                <button class="btn-primary" onclick="toggleModal('jobModal')">Post Job</button>
+            </div>
+            <div class="grid" id="jobsList">
+                <!-- Jobs will be injected here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Student Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content glass">
+            <span class="close" onclick="toggleModal('studentModal')">&times;</span>
+            <h2>Register Student</h2>
+            <form id="studentForm" onsubmit="submitStudent(event)">
+                <input type="text" id="sName" placeholder="Full Name" required>
+                <input type="email" id="sEmail" placeholder="Email" required>
+                <input type="text" id="sDegree" placeholder="Degree" required>
+                <input type="number" id="sCgpa" step="0.1" placeholder="CGPA" required>
+                <input type="text" id="sSkills" placeholder="Skills (comma separated)" required>
+                <button type="submit" class="btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Company Modal -->
+    <div id="companyModal" class="modal">
+        <div class="modal-content glass">
+            <span class="close" onclick="toggleModal('companyModal')">&times;</span>
+            <h2>Register Company</h2>
+            <form id="companyForm" onsubmit="submitCompany(event)">
+                <input type="text" id="cName" placeholder="Company Name" required>
+                <textarea id="cDesc" placeholder="Description" required></textarea>
+                <button type="submit" class="btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Job Modal -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content glass">
+            <span class="close" onclick="toggleModal('jobModal')">&times;</span>
+            <h2>Post Job</h2>
+            <form id="jobForm" onsubmit="submitJob(event)">
+                <input type="text" id="jCompanyId" placeholder="Company ID" required>
+                <input type="text" id="jTitle" placeholder="Job Title" required>
+                <textarea id="jDesc" placeholder="Job Description" required></textarea>
+                <input type="number" id="jCgpa" step="0.1" placeholder="Required CGPA" required>
+                <button type="submit" class="btn-primary">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

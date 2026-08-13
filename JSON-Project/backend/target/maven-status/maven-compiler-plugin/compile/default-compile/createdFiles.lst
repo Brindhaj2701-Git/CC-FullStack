@@ -1,0 +1,9 @@
+com\placement\model\DatabaseModel.class
+com\placement\PlacementPortalApplication$1.class
+com\placement\model\Student.class
+com\placement\model\Company.class
+com\placement\controller\PortalController.class
+com\placement\model\Job.class
+com\placement\PlacementPortalApplication.class
+com\placement\repository\DataRepository.class
+com\placement\model\Application.class
