@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Hooks Concepts</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #eef2ff, #f8fafc);
+        min-height: 100vh;
+        padding: 24px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 24px;
+        color: #111827;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+      }
+
+      h3 {
+        margin-top: 0;
+        color: #1f2937;
+      }
+
+      .counter {
+        font-size: 36px;
+        font-weight: bold;
+        color: #2563eb;
+        margin: 12px 0;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      button {
+        border: none;
+        background: #2563eb;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        margin: 10px 0;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      li {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+      }
+
+      .status {
+        margin-top: 12px;
+        background: #dbeafe;
+        color: #1d4ed8;
+        padding: 10px 12px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect, useRef, useMemo, useCallback, useReducer, useContext, createContext } = React;
+      const ThemeContext = createContext();
+
+      function useCounter(initialValue = 0) {
+        const [count, setCount] = useState(initialValue);
+
+        const increment = useCallback(() => setCount((prev) => prev + 1), []);
+        const decrement = useCallback(() => setCount((prev) => prev - 1), []);
+        const reset = useCallback(() => setCount(initialValue), [initialValue]);
+
+        return { count, increment, decrement, reset };
+      }
+
+      function reducer(state, action) {
+        switch (action.type) {
+          case 'ADD':
+            return [...state, action.payload];
+          case 'REMOVE':
+            return state.filter((_, index) => index !== action.payload);
+          default:
+            return state;
+        }
+      }
+
+      function App() {
+        return (
+          <div className="container">
+            <h1>React Hooks Examples</h1>
+            <div className="grid">
+              <UseStateExample />
+              <UseEffectExample />
+              <UseRefExample />
+              <UseMemoExample />
+              <UseCallbackExample />
+              <UseReducerExample />
+              <UseContextExample />
+              <CustomHookExample />
+            </div>
+          </div>
+        );
+      }
+
+      function UseStateExample() {
+        const [count, setCount] = useState(0);
+
+        return (
+          <div className="card">
+            <h3>useState</h3>
+            <div className="counter">{count}</div>
+            <div className="button-row">
+              <button onClick={() => setCount(count + 1)}>+1</button>
+              <button onClick={() => setCount(count - 1)}>-1</button>
+              <button onClick={() => setCount(0)}>Reset</button>
+            </div>
+          </div>
+        );
+      }
+
+      function UseEffectExample() {
+        const [seconds, setSeconds] = useState(0);
+
+        useEffect(() => {
+          const timer = setInterval(() => setSeconds((s) => s + 1), 1000);
+          return () => clearInterval(timer);
+        }, []);
+
+        return (
+          <div className="card">
+            <h3>useEffect</h3>
+            <div className="counter">{seconds}s</div>
+            <div className="status">This timer runs after render.</div>
+          </div>
+        );
+      }
+
+      function UseRefExample() {
+        const inputRef = useRef(null);
+
+        useEffect(() => {
+          inputRef.current.focus();
+        }, []);
+
+        return (
+          <div className="card">
+            <h3>useRef</h3>
+            <input ref={inputRef} placeholder="Focus is set automatically" />
+          </div>
+        );
+      }
+
+      function UseMemoExample() {
+        const [input, setInput] = useState('react');
+
+        const uppercaseValue = useMemo(() => {
+          return input.toUpperCase();
+        }, [input]);
+
+        return (
+          <div className="card">
+            <h3>useMemo</h3>
+            <input value={input} onChange={(e) => setInput(e.target.value)} />
+            <div className="status">Uppercase: {uppercaseValue}</div>
+          </div>
+        );
+      }
+
+      function UseCallbackExample() {
+        const [count, setCount] = useState(0);
+
+        const increment = useCallback(() => {
+          setCount((c) => c + 1);
+        }, []);
+
+        return (
+          <div className="card">
+            <h3>useCallback</h3>
+            <div className="counter">{count}</div>
+            <button onClick={increment}>Increment</button>
+          </div>
+        );
+      }
+
+      function UseReducerExample() {
+        const [items, dispatch] = useReducer(reducer, ['HTML', 'CSS', 'React']);
+
+        return (
+          <div className="card">
+            <h3>useReducer</h3>
+            <ul>
+              {items.map((item, index) => (
+                <li key={item + index}>
+                  {item}
+                  <button style={{ marginLeft: '8px' }} onClick={() => dispatch({ type: 'REMOVE', payload: index })}>Remove</button>
+                </li>
+              ))}
+            </ul>
+            <div className="button-row">
+              <button onClick={() => dispatch({ type: 'ADD', payload: 'Hooks' })}>Add Hooks</button>
+            </div>
+          </div>
+        );
+      }
+
+      function UseContextExample() {
+        const [theme, setTheme] = useState('light');
+
+        return (
+          <ThemeContext.Provider value={{ theme, setTheme }}>
+            <div className="card">
+              <h3>useContext</h3>
+              <p>Current theme: {theme}</p>
+              <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+                Toggle Theme
+              </button>
+              <ThemeDisplay />
+            </div>
+          </ThemeContext.Provider>
+        );
+      }
+
+      function ThemeDisplay() {
+        const { theme } = useContext(ThemeContext);
+        return <div className="status">Theme from Context: {theme}</div>;
+      }
+
+      function CustomHookExample() {
+        const { count, increment, decrement, reset } = useCounter(5);
+
+        return (
+          <div className="card">
+            <h3>Custom Hook</h3>
+            <div className="counter">{count}</div>
+            <div className="button-row">
+              <button onClick={increment}>+1</button>
+              <button onClick={decrement}>-1</button>
+              <button onClick={reset}>Reset</button>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>
